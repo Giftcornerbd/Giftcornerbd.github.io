@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Gift Corner BD</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; background: #f4f4f9; }
+    h2 { text-align: center; color: #333; }
+    form { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input, button { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    button { background: #28a745; color: white; font-weight: bold; border: none; cursor: pointer; }
+    button:hover { background: #218838; }
+  </style>
+</head>
+<body>
+
+  <h2>নতুন প্রোডাক্ট অ্যাড করুন</h2>
+  
+  <form id="productForm">
+    <input type="text" id="title" placeholder="প্রোডাক্টের নাম" required>
+    <input type="text" id="price" placeholder="দাম (যেমন: ৫০০ টাকা)" required>
+    <input type="text" id="image" placeholder="ছবি URL (Image Link)" required>
+    <button type="submit">পাবলিশ করুন</button>
+  </form>
+
+  <script>
+    const SUPABASE_URL = "https://xpjocpndczgeotojaltk.supabase.co";
+    const SUPABASE_KEY = "Sb_publishable_PrfUL8KC-itUk-6Y5bxi7w_BmjHme97";
+    
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById('title').value;
+      const price = document.getElementById('price').value;
+      const image_url = document.getElementById('image').value;
+
+      const { data, error } = await _supabase
+        .from('products')
+        .insert([{ title: title, price: price, image_url: image_url }]);
+
+      if (error) {
+        alert('ভুল হয়েছে: ' + error.message);
+      } else {
+        alert('প্রোডাক্ট সফলভাবে যোগ হয়েছে!');
+        document.getElementById('productForm').reset();
+      }
+    });
+  </script>
+</body>
+</html>
